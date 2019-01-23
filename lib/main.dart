@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter/rendering.dart';
 
 import './product_manager.dart';
 
-main() => runApp(MyApp());
+main() {
+  // debugPaintSizeEnabled = true;
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(context) {
     return new MaterialApp(
+      // debugShowMaterialGrid: true,
       theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.deepOrange,
-        accentColor: Colors.deepPurple
-      ),
+          brightness: Brightness.light,
+          primarySwatch: Colors.deepOrange,
+          accentColor: Colors.deepPurple),
       home: Scaffold(
         appBar: AppBar(
           title: Text('EasyList'),
