@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './pages/products_admin.dart';
 import './pages/products.dart';
 import './pages/product.dart';
+import './pages/auth.dart';
 
 main() {
   // debugPaintSizeEnabled = true;
@@ -42,7 +43,8 @@ class _MyAppState extends State<MyApp> {
           accentColor: Colors.deepPurple),
       // home: AuthPage(),
       routes: {
-        '/': (BuildContext context) => ProductsPage(_products),
+        '/': (BuildContext context) => AuthPage(),
+        '/products': (BuildContext context) => ProductsPage(_products),
         '/admin': (BuildContext context) =>
             ProductsAdminPage(_addProducts, _deleteProduct)
       },
