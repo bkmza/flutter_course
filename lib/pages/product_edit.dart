@@ -4,6 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/product.dart';
 import '../scoped-models/main.dart';
+import '../widgets/form_inputs/location.dart';
 
 class ProductEditPage extends StatefulWidget {
   @override
@@ -144,6 +145,10 @@ class _ProductEditPageState extends State<ProductEditPage> {
               _buildTitleTextField(product),
               _buildDescriptionTextField(product),
               _buildPriceTextField(product),
+              SizedBox(
+                height: 10.0,
+              ),
+              LocationInput(),
               SizedBox(
                 height: 10.0,
               ),
