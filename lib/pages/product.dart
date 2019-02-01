@@ -39,31 +39,39 @@ class ProductPage extends StatelessWidget {
         return Future.value(false);
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            product.title,
-          ),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            FadeInImage(
-              height: 300.0,
-              fit: BoxFit.cover,
-              placeholder: AssetImage('assets/food.jpg'),
-              image: NetworkImage(product.image),
-            ),
-            Container(
-                padding: EdgeInsets.all(10.0),
-                child: TitleDefault(product.title)),
-            _buildAddressPriceRow(product.price),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                product.description,
-                textAlign: TextAlign.center,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 256.0,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(product.title),
+                background: Hero(
+                  tag: product.id,
+                  child: FadeInImage(
+                    height: 300.0,
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage('assets/food.jpg'),
+                    image: NetworkImage(product.image),
+                  ),
+                ),
               ),
             ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: TitleDefault(product.title)),
+                _buildAddressPriceRow(product.price),
+                Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    product.description,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ]),
+            )
           ],
         ),
         floatingActionButton: ProductFAB(product),
