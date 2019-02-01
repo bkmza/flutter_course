@@ -30,26 +30,33 @@ class ProductCard extends StatelessWidget {
 
   Widget _buildActionButtons(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget widget, MainModel model) {
-      return ButtonBar(alignment: MainAxisAlignment.center, children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.info),
-          color: Theme.of(context).accentColor,
-          onPressed: () => Navigator.pushNamed<bool>(
-              context, '/product/' + model.allProducts[productIndex].id),
-        ),
-        IconButton(
-          icon: Icon(model.allProducts[productIndex].isFavorite
-              ? Icons.favorite
-              : Icons.favorite_border),
-          color: Colors.red,
-          onPressed: () {
-            model.selectProduct(model.allProducts[productIndex].id);
-            model.toggleProductFavoriteStatus();
-          },
-        ),
-      ]);
-    });
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.info),
+                color: Theme.of(context).accentColor,
+                onPressed: () {
+                  model.selectProduct(model.allProducts[productIndex].id);
+                  Navigator.pushNamed<bool>(context,
+                          '/product/' + model.allProducts[productIndex].id)
+                      .then((_) => model.selectProduct(null));
+                },
+              ),
+              IconButton(
+                icon: Icon(model.allProducts[productIndex].isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border),
+                color: Colors.red,
+                onPressed: () {
+                  model.selectProduct(model.allProducts[productIndex].id);
+                  model.toggleProductFavoriteStatus();
+                },
+              ),
+            ]);
+      },
+    );
   }
 
   @override

@@ -48,6 +48,7 @@ class _ProductListPageState extends State<ProductListPage> {
               key: Key(model.allProducts[index].title),
               onDismissed: (DismissDirection direction) {
                 model.selectProduct(model.allProducts[index].id);
+                model.deleteProduct();
                 if (direction == DismissDirection.endToStart) {
                   model.deleteProduct();
                 } else if (direction == DismissDirection.startToEnd) {
