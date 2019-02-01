@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/product.dart';
 import '../scoped-models/main.dart';
 import '../widgets/form_inputs/location.dart';
+import '../widgets/ui_elements/adaptive_indicator.dart';
 
 class ProductEditPage extends StatefulWidget {
   @override
@@ -24,6 +26,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   final _titleFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _priceFocusNode = FocusNode();
+  final _priceTextController = TextEditingController();
 
   Widget _buildTitleTextField(Product product) {
     return EnsureVisibleWhenFocused(
@@ -65,13 +68,20 @@ class _ProductEditPageState extends State<ProductEditPage> {
   }
 
   Widget _buildPriceTextField(Product product) {
+    if (product == null && _priceTextController.text.trim() == '') {
+      _priceTextController.text = '';
+    } else if (product != null && _priceTextController.text.trim() == '') {
+      _priceTextController.text = product.description;
+    }
+
     return EnsureVisibleWhenFocused(
       focusNode: _priceFocusNode,
       child: TextFormField(
         focusNode: _priceFocusNode,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(labelText: 'Product Price'),
-        initialValue: product == null ? '' : product.price.toString(),
+        controller: _priceTextController,
+        // initialValue: product == null ? '' : product.price.toString(),
         validator: (String value) {
           if (value.isEmpty ||
               !RegExp(r'^(?:[1-9]\d*|0)?(?:[.,]\d+)?$').hasMatch(value)) {
@@ -97,7 +107,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
         _formData['title'],
         _formData['description'],
         _formData['image'],
-        _formData['price'],
+        double.parse(_priceTextController.text),
       ).then((bool success) {
         if (success) {
           Navigator.pushReplacementNamed(context, '/products')
@@ -121,7 +131,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
       });
     } else {
       updateProduct(_formData['title'], _formData['description'],
-              _formData['image'], _formData['price'])
+              _formData['image'], double.parse(_priceTextController.text))
           .then((_) => Navigator.pushReplacementNamed(context, '/products')
               .then((_) => setSelectedProduct(null)));
     }
@@ -165,7 +175,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
         builder: (BuildContext context, Widget widget, MainModel model) {
       return model.isLoading
           ? Center(
-              child: CircularProgressIndicator(),
+              child: AdaptiveProgressIndicator(),
             )
           : RaisedButton(
               child: Text('Save'),

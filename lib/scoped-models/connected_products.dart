@@ -8,6 +8,7 @@ import 'package:rxdart/subjects.dart';
 import '../models/product.dart';
 import '../models/user.dart';
 import '../models/auth.dart';
+import '../shared/global_config.dart';
 
 mixin ConnectedProductsModel on Model {
   List<Product> _products = [];
@@ -60,8 +61,7 @@ mixin ProductsModel on ConnectedProductsModel {
     final Map<String, dynamic> productData = {
       'title': title,
       'description': description,
-      'image':
-          'https://img.huffingtonpost.com/asset/5b7d981c190000b606502692.jpeg',
+      'image': defaultImageURL,
       'price': price,
       'userEmail': _authenticatedUser.email,
       'userId': _authenticatedUser.id
@@ -103,8 +103,7 @@ mixin ProductsModel on ConnectedProductsModel {
     final Map<String, dynamic> updateData = {
       'title': title,
       'description': description,
-      'image':
-          'https://img.huffingtonpost.com/asset/5b7d981c190000b606502692.jpeg',
+      'image': defaultImageURL,
       'price': price,
       'userEmail': selectedProduct.userEmail,
       'userId': selectedProduct.userId
@@ -141,7 +140,7 @@ mixin ProductsModel on ConnectedProductsModel {
     notifyListeners();
     return http
         .delete(
-            'https://flutter-course-9717d.firebaseio.com/products/${deletedProductId}.json?auth=${_authenticatedUser.token}')
+            'https://flutter-course-9717d.firebaseio.com/products/$deletedProductId.json?auth=${_authenticatedUser.token}')
         .then((http.Response response) {
       _isLoading = false;
       notifyListeners();
@@ -153,8 +152,11 @@ mixin ProductsModel on ConnectedProductsModel {
     });
   }
 
-  Future<Null> fetchProducts({onlyForUser = false}) {
+  Future<Null> fetchProducts({onlyForUser = false, clearExisting = false}) {
     _isLoading = true;
+    if (clearExisting) {
+      _products = [];
+    }
     notifyListeners();
     return http
         .get(
@@ -232,6 +234,7 @@ mixin ProductsModel on ConnectedProductsModel {
       _products[selectedProductIndex] = updatedProduct;
       notifyListeners();
     }
+    _selProductId = null;
   }
 
   void selectProduct(String productId) {
@@ -342,6 +345,7 @@ mixin UserModel on ConnectedProductsModel {
     _authenticatedUser = null;
     _authTimer.cancel();
     _userSubject.add(false);
+    _selProductId = null;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('userId');
     prefs.remove('userEmail');

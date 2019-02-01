@@ -1,0 +1,1 @@
+final String defaultImageURL = "https://img.huffingtonpost.com/asset/5b7d981c190000b606502692.jpeg";

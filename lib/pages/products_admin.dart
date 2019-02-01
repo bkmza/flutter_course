@@ -17,6 +17,7 @@ class ProductsAdminPage extends StatelessWidget {
           AppBar(
             automaticallyImplyLeading: false,
             title: Text('Choose'),
+            elevation: 4.0,
           ),
           ListTile(
             leading: Icon(Icons.shop),
